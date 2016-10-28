@@ -103,6 +103,7 @@ chrome.extension.sendMessage({}, function(response) {
         <div id="controller" style="top:${top}; left:${left}">
           <span data-action="drag" class="draggable">${speed}</span>
           <span id="controls">
+            <button data-action="openExternal" class="oe">Open</button>
             <button data-action="rewind" class="rw">«</button>
             <button data-action="slower">-</button>
             <button data-action="faster">+</button>
@@ -288,7 +289,15 @@ chrome.extension.sendMessage({}, function(response) {
         showController(controller);
 
       if (!v.classList.contains('vsc-cancelled')) {
-        if (action === 'rewind') {
+        if (action === 'openExternal') {
+			var url = 'potplayer://';
+			if (v.src.match(/^blob.*/i)) {
+				url += document.URL;
+			} else{
+				url += v.src;
+			}
+			window.open(url, '_self');
+        } else if (action === 'rewind') {
           v.currentTime -= tc.settings.rewindTime;
         } else if (action === 'advance') {
           v.currentTime += tc.settings.advanceTime;
